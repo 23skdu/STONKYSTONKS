@@ -1,0 +1,16 @@
+equities: [SMR,DNN,NVDA,CCJ,UEC,LEU,SDZNY,UROY,CWEN,COST,CMG,JPM,CVX,VZ,NFLX,ARM,F,GM,GME]
+indexes: [DJI,VIX,GSPC,IXIC,FTSE]
+futures: [CL=F,GC=F,SI=F,PA=F,UX=F,HG=F,NG=F]
+etfs: [URA,URNM]
+currencies: [BTC-USD,RUB=X,EUR=X]
+predict_days: [1,2,3,5,8,13,21,34]
+quickrun: 1000
+deeprun: 1000000
+db:
+  datadir: /data/dbs
+  schema:
+     tables:
+       metainfo:
+         columns: ["entityname", "marketcap"]
+       dailyhistory:
+         columns: ["Date","Open","High","Low","Close","Adj Close","Volume"]
