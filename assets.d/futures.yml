@@ -26,5 +26,10 @@
    - id: "naturalgas"
      name: "Natural Gas"
      ysymbol: "NG=F"
-     labels: ["futures","naturalgas","commodity","energy"
+     labels: ["futures","naturalgas","commodity","energy"]
+     coda: ""
+   - id: "wheat"
+     name: "Chicago SRW Wheat Futures"
+     ysymbol: "ZW=F"
+     labels: ["futures","wheat","commodity"]
      coda: ""
