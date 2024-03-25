@@ -1,6 +1,30 @@
-futures:
-   - id:
-     name:
-     yfisym:
-     labels:
-     coda:
+   - id: "crude"
+     name: "Crude Oil"
+     ysymbol: "CL=F"
+     labels: ["futures","oil","commodity","energy"]
+     coda: ""
+   - id: "gold"
+     name: "Gold"
+     ysymbol: "GC=F"
+     labels: ["futures","gold","commodity","mineral"]
+     coda: "all that glitters is not gold"
+   - id: "silver"
+     name: "Silver"
+     ysymbol: "SI=F"
+     labels: ["futures","silver","commodity","mineral"]
+     coda: "hi-ho silver!"
+   - id: "palladium"
+     name: "Palladium"
+     ysymbol: "PA=F"
+     labels: ["futures","silver","commodity","mineral"]
+     coda: ""
+   - id: "uranium"
+     name: "UxC Uranium U3O8"
+     ysymbol: "UX=F"
+     labels: ["futures","uranium","commodity","energy"]
+     coda: ""
+   - id: "naturalgas"
+     name: "Natural Gas"
+     ysymbol: "NG=F"
+     labels: ["futures","naturalgas","commodity","energy"
+     coda: ""

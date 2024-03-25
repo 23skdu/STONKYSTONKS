@@ -1,6 +1,15 @@
-indexes:
    - id:
      name:
-     yfisym:
+     symbol:
+     labels:
+     coda:
+   - id:
+     name:
+     symbol:
+     labels:
+     coda:
+   - id:
+     name:
+     symbol:
      labels:
      coda:

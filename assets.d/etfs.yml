@@ -1,6 +1,15 @@
-etfs:
-   - id:
-     name:
-     yfisym:
-     labels:
-     coda:
+   - id: "ura"
+     name: "Global X Uranium"
+     symbol: "URA"
+     labels: ["etf","uranium"]
+     coda: ""
+   - id: "urnm"
+     name: "Sprott Uranium Miners"
+     symbol: "URNM"
+     labels: ["etf","uranium"]
+     coda: ""
+   - id: "vug"
+     name: "Vanguard Growth Index Fund"
+     symbol: "VUG"
+     labels: ["etf"]
+     coda: ""

@@ -1,0 +1,16 @@
+securities:
+   - id: "sruuf"
+     name: "Sprott Physical Uranium Trust"
+     symbol: "sruuf"
+     labels: ["uranium","otcmkts"]
+     coda: ""
+   - id:
+     name:
+     symbol:
+     labels:
+     coda:
+   - id:
+     name:
+     symbol:
+     labels:
+     coda:
