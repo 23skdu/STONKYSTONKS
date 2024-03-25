@@ -28,3 +28,8 @@
      ysymbol: "^NYA"
      labels: ["index","nyse"]
      coda: ""
+   - id: "sensex"
+     name: "S&P BSE SENSEX"
+     ysymbol: "^BSESN"
+     labels: ["index","snp"]
+     coda: ""

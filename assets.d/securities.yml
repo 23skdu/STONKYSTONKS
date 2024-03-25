@@ -1,4 +1,4 @@
-   - id: "sruuf"
+   - id: "sprott"
      name: "Sprott Physical Uranium Trust"
      ysymbol: "sruuf"
      labels: ["uranium","otc","equity","energy"]
@@ -61,31 +61,31 @@
    - id: "mcdonalds"
      name: "McDonalds Corporation"
      ysymbol: "MCD"
-     labels: 
+     labels: ["equity","restaurants"] 
      coda: ""
-   - id:
-     name:
-     ysymbol:
-     labels:
+   - id: "costco"
+     name: "Costsco Wholesale Corporation"
+     ysymbol: "COST"
+     labels: ["equity","retail"]
      coda: ""
-   - id:
-     name:
-     ysymbol:
-     labels:
+   - id: "jpmorgan"
+     name: "JPMorgan Chase & Co."
+     ysymbol: "JPM"
+     labels: ["equity","banking"]`
      coda: ""
-   - id:
-     name:
-     ysymbol:
-     labels:
+   - id: "chevron"
+     name: "Chevron Corporation"
+     ysymbol: "CVX"
+     labels: ["equity","energy","oil"]
      coda: ""
-   - id:
-     name:
-     ysymbol:
-     labels:
+   - id: "verizon"
+     name: "Verizon Communications Inc."
+     ysymbol: "VZ"
+     labels: ["equity","telecom","technology"]
      coda: ""
-   - id:
-     name:
-     ysymbol:
+   - id: "netflix"
+     name: "Netflix, Inc."
+     ysymbol: "NFLX"
      labels:
      coda: ""
    - id:

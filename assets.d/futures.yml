@@ -16,7 +16,7 @@
    - id: "palladium"
      name: "Palladium"
      ysymbol: "PA=F"
-     labels: ["futures","silver","commodity","mineral"]
+     labels: ["futures","palladium","commodity","mineral"]
      coda: ""
    - id: "uranium"
      name: "UxC Uranium U3O8"
