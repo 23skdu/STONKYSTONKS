@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
-
-import argparse,os,sys
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
-
+import yaml
+import os,sys
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import numpy as np
 import pandas as pd
 import yfinance as yf
-import matplotlib
-matplotlib.use('Agg') # Use a non-interactive backend such as 'Agg'
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
-import plotly.graph_objects as go
+tf.get_logger().setLevel('ERROR')
 
-def create_dataset(dataset, time_step=1000):
+def create_dataset(dataset, time_step=100):
  X, Y = [], []
  for i in range(len(dataset) - time_step - 1):
    a = dataset[i:(i + time_step), 0] # Extracting 'time_step' number of elements
@@ -30,30 +26,23 @@ def predict_next_days(model, last_data, scaler, n_days, time_step):
    x_input = np.array(future_predictions[-time_step:]).reshape(1, -1, 1)
    next_day_pred = model.predict(x_input)
    future_predictions.append([next_day_pred[0][0]])
-   # Inverse transform the predictions
    future_predictions_scaled = np.array(future_predictions[-n_days:]).reshape(-1, 1)
    future_predictions = scaler.inverse_transform(future_predictions_scaled)
    return future_predictions.flatten()
 
-
-plot_directory = "./plots"
-os.makedirs(plot_directory, exist_ok=True)
-
-stocks = [ 'UEC' ]
-start_date = '2007-04-06'
-end_date = '2024-03-10'
-time_step = 1000
-future_days = 30
-
-fig = go.Figure()
+stocks = ['SMR','UEC','DNN','IVR','PHO','URG','NXE','KTOS','CDE','LEU','KURA']
+time_step = 100
+future_days = 1 
 
 for ticker in stocks:
-  print(f"Processing {ticker}")
-  data = yf.download(ticker, start=start_date, end=end_date)
+  print(ticker)
+  data = yf.download(ticker, start=None, end=None, rounding=False, period="max", progress=False)
   if data.empty:
     print(f"No data fetched for {ticker}. Skipping.")
     continue
   data = data[['Close']].copy()
+  last = data.iloc[-1]
+  print(last.to_string())
   data.ffill(inplace=True)
   scaler = MinMaxScaler(feature_range=(0, 1))
   scaled_data = scaler.fit_transform(data)
@@ -67,32 +56,9 @@ for ticker in stocks:
   model.add(LSTM(50, return_sequences=False))
   model.add(Dense(1))
   model.compile(optimizer='adam', loss='mean_squared_error')
-  model.fit(X_train, y_train, batch_size=64, epochs=1000, verbose=0)
+  model.fit(X_train, y_train, batch_size=64, epochs=10000, verbose=0)
   predictions = model.predict(X_test)
   predictions = scaler.inverse_transform(predictions)
-  # Predict the next 10 days
   future_pred = predict_next_days(model, scaled_data, scaler, future_days, time_step)
-  # Manually generate future dates for plotting
-  last_date = data.index[-1]
-  future_dates = [last_date + pd.Timedelta(days=i) for i in range(1, future_days + 1)]
-  test_dates = data.index[len(train_data) + time_step - 1:len(train_data) + time_step - 1 + len(predictions)]
-  fig.add_trace(go.Scatter(x=data.index, y=data['Close'], mode='lines', name=f"{ticker} Actual"))
-  fig.add_trace(go.Scatter(x=future_dates, y=future_pred.flatten(), mode='lines', name=f"{ticker} Forecast"))
-  plt.figure(figsize=(12, 6))
-  plt.plot(data.index, data['Close'], label='Historical Prices')
-  plt.plot(test_dates, predictions, label='Test Predictions')
-  plt.plot(future_dates, future_pred, label='Future Predictions', linestyle='--')
-  plt.title(f"{ticker} - Stock Price Prediction")
-  plt.xlabel('Date')
-  plt.ylabel('Price')
-  plt.legend()
-  plt.xticks(rotation=45)
-  plt.tight_layout()
-  plt.savefig(os.path.join(plot_directory, f"{ticker}_predictions.png"))
-  plt.close()
-  fig.update_layout(title='Stock Price Prediction with Future Forecast', xaxis_title='Date', yaxis_title='Price')
-  plot_filename = os.path.join(plot_directory, "combined_stock_predictions_with_forecast.html")
-  fig.write_html(plot_filename)
-  print(f"Forecast plot saved at {plot_filename}")
-
+  print(future_pred)
  
