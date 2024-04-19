@@ -31,7 +31,8 @@ def predict_next_days(model, last_data, scaler, n_days, time_step):
    future_predictions = scaler.inverse_transform(future_predictions_scaled)
    return future_predictions.flatten()
 
-stocks = ['SMR','UEC','DNN','IVR','PHO','URG','NXE','KTOS','CDE','LEU','KURA','RTX','FCUUF','LMT','GD','NOC','LMT']
+#stocks = ['SMR','UEC','DNN','IVR','PHO','URG', 'NVDA','NXE','KTOS','CDE','LEU','KURA','RTX','FCUUF','LMT','GD','NOC','LMT']
+stocks = [ 'NVDA' ]
 time_step = 100
 future_days = 1 
 print(stocks)
@@ -60,16 +61,19 @@ for ticker in stocks:
   model.add(LSTM(50, return_sequences=False))
   model.add(Dense(1))
   model.compile(optimizer='adam', loss='mean_squared_error')
-  model.fit(X_train, y_train, batch_size=64, epochs=1000, verbose=0)
+  model.fit(X_train, y_train, batch_size=64, epochs=100, verbose=0)
+  tf.saved_model.save(model, 'NVDA.tfmodel.100')
   predictions = model.predict(X_test)
   predictions = scaler.inverse_transform(predictions)
   future_pred = predict_next_days(model, scaled_data, scaler, future_days, time_step)
   second_future = predict_next_days(model, scaled_data, scaler, future_days + 2, time_step)
   third_future = predict_next_days(model, scaled_data, scaler, future_days + 6, time_step)
   fourth_future = predict_next_days(model, scaled_data, scaler, future_days + 10, time_step)
-  fourth_future = predict_next_days(model, scaled_data, scaler, future_days + 16, time_step)
+  fifth_future = predict_next_days(model, scaled_data, scaler, future_days + 16, time_step)
+  sixth_future = predict_next_days(model, scaled_data, scaler, future_days + 70, time_step)
   print(f"Prediction: {future_pred}")
   print(f"Prediction: {second_future}")
   print(f"Prediction: {third_future}")
   print(f"Prediction: {fourth_future}")
   print(f"Prediction: {fifth_future}")
+  print(f"Prediction: {sixth_future}")
