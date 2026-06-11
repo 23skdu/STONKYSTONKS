@@ -5,7 +5,7 @@ import pandas as pd
 import talib
 import matplotlib.pyplot as plt
 
-def main(ticker):
+def main(ticker, show_plot=True):
     # Fetch historical data
     data = yf.download(ticker, period="1y")
     
@@ -31,7 +31,9 @@ def main(ticker):
     plt.ylabel('Price/Volume')
     plt.legend()
     plt.grid()
-    plt.show()
+    if show_plot:
+        plt.show()
+    return data
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -39,4 +41,5 @@ if __name__ == "__main__":
     else:
         ticker = sys.argv[1]
         main(ticker)
+
 
