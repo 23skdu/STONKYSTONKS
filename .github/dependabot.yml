@@ -1,7 +1,38 @@
+# Keeps every dependency in this repository moving forward:
+#   * pip      -> requirements.txt / requirements-dev.txt pins
+#   * docker   -> the pinned Python base image in the Dockerfile
+#   * actions  -> the workflow action tags in .github/workflows
+# Patch/minor updates are auto-merged by .github/workflows/dependabot-auto-merge.yml
+# once the CI checks are green; major updates always wait for a human.
 version: 2
 updates:
-  # Maintain dependencies in the Dockerfile
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
+
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    groups:
+      docker-base-images:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

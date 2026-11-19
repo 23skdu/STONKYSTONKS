@@ -1,0 +1,45 @@
+# Keep the build context small and deterministic: only what the image needs.
+# `tests/` and `pyproject.toml` stay in the context because the `test`
+# build stage runs the suite against the exact dependencies that ship.
+
+# Version control / CI
+.git
+.github
+.gitignore
+.gitattributes
+
+# Local environments and tool caches
+.venv
+venv
+env
+**/__pycache__
+**/*.py[cod]
+.ruff_cache
+.mypy_cache
+.pytest_cache
+.coverage
+coverage.xml
+htmlcov
+*.egg-info
+
+# Docs and metadata (not copied into the image)
+docs
+*.md
+LICENSE
+Makefile
+pyproject.toml.bak
+
+# Generated data, models and figures
+data
+models
+*.tfmodel.100
+*.png
+*.csv
+*.log
+
+# Editor / agent configuration
+.vscode
+.idea
+opencode.json
+.dockerignore
+Dockerfile

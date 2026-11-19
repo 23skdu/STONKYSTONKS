@@ -1,40 +1,83 @@
-# Stonky Stonks Tools
+# Stonky Stonks
 
-## Script Inventory & Descriptions
+[![CI](https://github.com/23skdu/STONKYSTONKS/actions/workflows/ci.yml/badge.svg)](https://github.com/23skdu/STONKYSTONKS/actions/workflows/ci.yml)
 
-This repository contains several utility and analysis scripts:
+Small Python tools for stock-market analysis: descriptive statistics, volume/price
+visualisation, a classifier benchmark and an LSTM price-prediction experiment -
+all runnable locally or from a minimal, hardened container image.
 
-*   **[stonky](file:///home/rsd/REPOS/STONKYSTONKS/stonky)**: An LSTM-based stock price prediction script using TensorFlow and Keras. It downloads historical data for a given ticker (e.g., `NVDA`), trains a sequential LSTM model, saves it as `.tfmodel.100`, and prints price predictions for future time horizons.
-*   **[stats.py](file:///home/rsd/REPOS/STONKYSTONKS/stats.py)**: A command-line statistic calculator. It reads float data points from standard input (stdin) and prints descriptive statistics including Min/Max, Quartiles, Mean, Median, Harmonic Mean, Standard Deviation, Kurtosis, Skew, and Fibonacci levels (23.6%, 38.2%, 61.8%, 78.6%).
-*   **[modeltest.py](file:///home/rsd/REPOS/STONKYSTONKS/modeltest.py)**: Evaluates several machine learning classification algorithms (Logistic Regression, Decision Tree, Random Forest, SVM) on a synthetically generated binary classification dataset, reporting cross-validated accuracy, precision, recall, and F1 metrics.
-*   **[new_volprice_ema.py](file:///home/rsd/REPOS/STONKYSTONKS/new_volprice_ema.py)**: Calculates the price-to-volume ratio along with 25, 50, 100, and 200-day simple moving averages (SMAs) using `ta-lib` for a given ticker, displaying them on a matplotlib plot.
-*   **[ytd_volprice.py](file:///home/rsd/REPOS/STONKYSTONKS/ytd_volprice.py)**: Downloads YTD stock data for a given ticker and plots the close price and volume side-by-side using twin y-axes.
+## Tools
 
-## Running Unit Tests & Resolving Import Errors
+| Tool | What it does |
+| ---- | ------------ |
+| `stonky` | Trains a two-layer LSTM on a ticker's close price and prints 1/3/7/11/17/71-day forecasts (test RMSE included). |
+| `stats` | Min/max, quartiles, Fibonacci levels, mean, median, harmonic mean, std dev, kurtosis and skew for numbers read from stdin. |
+| `modeltest` | 5-fold cross-validation of Logistic Regression, Decision Tree, Random Forest and SVM on a synthetic dataset. |
+| `new_volprice_ema` | Price/volume ratio with 25/50/100/200-day moving averages, plotted. |
+| `ytd_volprice` | Year-to-date close price vs. volume on twin y-axes. |
 
-If your IDE reports missing module errors (such as `Cannot find module 'yfinance'`, `numpy`, `matplotlib`, or `talib`), this is because dependencies need to be installed in a virtual environment.
+Full option reference: [docs/scripts.md](docs/scripts.md).
 
-### 1. Set Up a Virtual Environment
-Create and activate a virtual environment, then install the required dependencies:
+## Quick start
+
+### Container (recommended)
+
 ```bash
-# Create the virtual environment
-python3 -m venv venv
-
-# Activate it
-source venv/bin/activate
-
-# Install the packages
-pip install numpy pandas scipy scikit-learn yfinance matplotlib seaborn
+docker build -t stonkystonks .
+docker run --rm -it stonkystonks --help
+printf "1\n2\n3\n4\n5\n" | docker run --rm -i stonkystonks stats
+docker run --rm stonkystonks ytd_volprice NVDA
 ```
-*Note: `ta-lib` requires the system TA-Lib C-library headers to be installed. Alternatively, you can run inside Docker where all dependencies are preconfigured.*
 
-### 2. Run the Unit Tests
-Once the virtual environment is set up and active, run the test suite using:
+### Local
+
+Requires Python 3.12-3.13 (TensorFlow constraint):
+
 ```bash
-python3 -m unittest discover -s tests
+make setup                 # creates .venv with the pinned dev dependencies
+source .venv/bin/activate
+make check                 # lint + format check + unit tests
+python -m scripts stonky NVDA --epochs 20
 ```
-*All tests use mocked modules for external APIs like `yfinance` and dependencies like `talib` and `tensorflow`, allowing tests to run quickly offline.*
 
+Each tool also runs directly: `python scripts/stats.py < data/series.txt`.
 
+## Quality, security and updates
 
+```bash
+make lint      # ruff
+make test      # unit tests (network and TensorFlow are mocked)
+make scan      # pip-audit (dependency CVEs) + bandit (SAST)
+make clean     # remove .venv, caches, test artifacts, data/ and models/
+```
 
+* **CI** (`.github/workflows/ci.yml`) runs lint, formatting, tests, `bandit`,
+  `pip-audit`, and builds the Dockerfile's `test` stage so the image only ships
+  code that passed the suite inside the shipped environment.
+* **Dependabot** (`.github/dependabot.yml`) opens weekly grouped PRs for the pip
+  pins, the Docker base image and the GitHub Actions; minor/patch updates are
+  auto-merged once CI is green (see
+  `.github/workflows/dependabot-auto-merge.yml`).
+* **The image** is multi-stage, pinned, non-root and needs no capabilities -
+  see [docs/docker.md](docs/docker.md).
+
+## Repository layout
+
+```
+scripts/            tools (importable package + `python -m scripts` CLI)
+tests/              unit tests (unittest + mocks)
+docs/               tool reference, development guide, container notes
+requirements.txt    pinned runtime dependencies
+requirements-dev.txt  + ruff, bandit, pip-audit
+pyproject.toml      ruff configuration
+Makefile            setup / lint / test / scan / clean targets
+Dockerfile          multi-stage, non-root image with an in-build test gate
+.github/            CI + Dependabot configuration
+```
+
+More documentation: [docs/scripts.md](docs/scripts.md) ·
+[docs/development.md](docs/development.md) · [docs/docker.md](docs/docker.md)
+
+## License
+
+Public domain - see [LICENSE](LICENSE) (Unlicense).

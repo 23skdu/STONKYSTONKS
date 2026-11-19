@@ -161,3 +161,11 @@ cython_debug/
 
 # Local custom open config
 opencode.json
+
+# Ruff (lint/format) cache
+.ruff_cache/
+
+# Local datasets, trained models and generated figures
+/data/
+/models/
+*.tfmodel.100
