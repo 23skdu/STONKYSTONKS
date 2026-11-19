@@ -44,6 +44,9 @@ setup: $(VENV)/.installed
 venv: $(VENV)/.installed
 
 $(VENV)/.installed: requirements.txt requirements-dev.txt
+	@$(PYTHON) -c 'import sys; raise SystemExit(0 if sys.version_info[:2] in ((3, 12), (3, 13)) else 1)' \
+		|| { echo "error: Python 3.12 or 3.13 is required (TensorFlow has no wheels for $$($(PYTHON) -V 2>&1))."; \
+		     echo "       Re-run with a supported interpreter, e.g. make setup PYTHON=python3.13"; exit 1; }
 	$(PYTHON) -m venv $(VENV)
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements-dev.txt
