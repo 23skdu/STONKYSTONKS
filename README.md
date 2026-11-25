@@ -80,4 +80,4 @@ More documentation: [docs/scripts.md](docs/scripts.md) ·
 
 ## License
 
-Public domain - see [LICENSE](LICENSE) (Unlicense).
+This project is released into the public domain under the [Unlicense](https://unlicense.org). See [LICENSE](LICENSE) for details.
